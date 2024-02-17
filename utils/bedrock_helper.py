@@ -9,6 +9,7 @@ import base64
 import os
 from utils.parms import ModelParams as parms
 
+
 class bedrock:
     def __init__(self):
         log.info(f"CLASS:Bedrock Initialized")
@@ -37,6 +38,7 @@ class bedrock:
         except ClientError:
             raise
 
+
     def execute_embeddings(self, parms_obj):
         log.info(f"Invoking Embedding with parameters: {parms_obj}")
         try:
@@ -51,7 +53,9 @@ class bedrock:
         except ClientError:
             raise
 
+
     def create_parms_meta(self, prompt, temperature=0.5, top_p=0.9, max_gen_len=512):
+        log.info(f"Creating parameters for Meta model")
         parms_obj = parms(prompt)
         parms_obj.upsert_param('temperature', temperature)
         parms_obj.upsert_param('top_p', top_p)
@@ -59,14 +63,15 @@ class bedrock:
         return parms_obj
     
     def create_parms_ai21(self, prompt, temperature=0.5, maxTokens=512):
+        log.info(f"Creating parameters for AI21 model")
         parms_obj = parms(prompt)
         parms_obj.upsert_param('temperature', temperature)
         parms_obj.upsert_param('maxTokens', maxTokens)
         return parms_obj
     
     def create_parms_claude(self, prompt, temperature=0.5, max_tokens_to_sample=512):
+        log.info(f"Creating parameters for Claude model")
         enclosed_prompt = "Human: " + prompt + "\n\nAssistant:"
-
         parms_obj = parms(enclosed_prompt)
         parms_obj.upsert_param('temperature', temperature)
         parms_obj.upsert_param('max_tokens_to_sample', max_tokens_to_sample)
@@ -74,6 +79,7 @@ class bedrock:
         return parms_obj
 
     def create_parms_titan_embedding(self, prompt, model):
+        log.info(f"Creating parameters for Titan Embedding model")
         parms_obj = parms(prompt)
         parms_obj.remove_param('prompt')  # Embedding doesn't require a prompt
         parms_obj.upsert_param('modelId', model)
@@ -81,38 +87,21 @@ class bedrock:
         parms_obj.upsert_param('accept', 'application/json')
         parms_obj.upsert_param('contentType', 'application/json')
         return parms_obj
+    
+    def create_parms_stability_ai(self, prompt, style):
+        log.info(f"Creating parameters for Stability AI model")
+        parms_obj = parms(prompt)
+        parms_obj.remove_param('prompt')  # Embedding doesn't require a prompt
+        parms_obj.upsert_param('text_prompts', [{"text": prompt}])
+        parms_obj.upsert_param('seed', random.randint(0, 4294967295))
+        parms_obj.upsert_param('cfg_scale', 10)
+        parms_obj.upsert_param('steps', 30)
+        parms_obj.upsert_param('style_preset', style)
+        return parms_obj
 
-
-    def execute_stability_ai(self, model_name, style, prompt):
-
-        try:
-            seed = random.randint(0, 4294967295)
-            body = {
-                "text_prompts": [{"text": prompt}],
-                "seed": seed,
-                "cfg_scale": 10,
-                "steps": 30,
-            }
-
-            body["style_preset"] = style
-
-            response = self.bedrock_client.invoke_model(
-                modelId=model_name, body=json.dumps(body)
-            )
-
-            response_body = json.loads(response["body"].read())
-            base64_image_data = response_body["artifacts"][0]["base64"]
-
-            image_path = self.save_image(base64_image_data, model_name)
-            print(f"The generated image has been saved to {image_path}")
-
-        except ClientError:
-            log.error("Couldn't invoke Stable Diffusion XL")
-            raise
-
-
-    def save_image(self, base64_image_data, model):
-        output_dir = Path("output") / model
+    
+    def save_image(self, base64_image_data):
+        output_dir = Path("output")
         output_dir.mkdir(parents=True, exist_ok=True)
 
         i = 1

@@ -25,14 +25,14 @@ def main():
 
     bedrock = br.bedrock()
     prompt = "Write a paragraph about Steve Jobs success and failures, and the impact of his work on the world."
-    image_prompt = "A beautiful sunset over snow covered mountains"
+    image_prompt = "A beautiful sunset over the ocean, with a sailboat in the distance."
     response = ""
     try:
         #Meta LLAMA2 Model
-        parms_meta = bedrock.create_parms_meta(prompt)
-        response = bedrock.execute(enums.BedrockModels.LLAMA2_CHAT_13B.value, parms_meta)
-        completion = response["generation"]
-        print_pretty(enums.BedrockModels.LLAMA2_CHAT_13B.value, completion)
+        # parms_meta = bedrock.create_parms_meta(prompt)
+        # response = bedrock.execute(enums.BedrockModels.LLAMA2_CHAT_13B.value, parms_meta)
+        # completion = response["generation"]
+        # print_pretty(enums.BedrockModels.LLAMA2_CHAT_13B.value, completion)
 
         # #AI21 J2 Model
         # parms_ai21 = bedrock.create_parms_ai21(prompt)
@@ -52,8 +52,13 @@ def main():
         # embeddings = response.get('embedding')
         # print_pretty(enums.BedrockModels.TITAN_EMBEDDING.value, embeddings)
 
+        # #Stable Diffusion XL Model
+        parms_stability = bedrock.create_parms_stability_ai(image_prompt, enums.StylePreset.CINEMATIC.value)
+        response = bedrock.execute(enums.BedrockModels.STABILITY_XL_1.value, parms_stability)
+        base64_image_data = response["artifacts"][0]["base64"]
+        image_path = bedrock.save_image(base64_image_data)
+        print(f"The generated image has been saved to {image_path}")
 
-        # bedrock.execute_stability_ai(enums.BedrockModels.STABILITY_XL_1.value, enums.StylePreset.CINEMATIC.value, image_prompt)
 
     except Exception as e:
         log.error(f"Error: {e}")
