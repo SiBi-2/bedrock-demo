@@ -53,7 +53,7 @@ class bedrock:
             raise
 
 
-    def create_parms_meta(self, prompt, temperature=0.5, top_p=0.9, max_gen_len=250):
+    def create_parms_meta(self, prompt, temperature=0.5, top_p=0.9, max_gen_len=500):
         log.info(f"Creating parameters for Meta model")
         parms_obj = parms(prompt)
         parms_obj.upsert_param('temperature', temperature)
@@ -61,14 +61,14 @@ class bedrock:
         parms_obj.upsert_param('max_gen_len', max_gen_len) 
         return parms_obj
     
-    def create_parms_ai21(self, prompt, temperature=0.5, maxTokens=250):
+    def create_parms_ai21(self, prompt, temperature=0.5, maxTokens=500):
         log.info(f"Creating parameters for AI21 model")
         parms_obj = parms(prompt)
         parms_obj.upsert_param('temperature', temperature)
         parms_obj.upsert_param('maxTokens', maxTokens)
         return parms_obj
     
-    def create_parms_claude(self, prompt, temperature=0.5, max_tokens_to_sample=250):
+    def create_parms_claude(self, prompt, temperature=0.5, max_tokens_to_sample=500):
         log.info(f"Creating parameters for Claude model")
         enclosed_prompt = "Human: " + prompt + "\n\nAssistant:"
         parms_obj = parms(enclosed_prompt)
@@ -77,7 +77,7 @@ class bedrock:
         parms_obj.upsert_param('stop_sequences', ["\n\nHuman:"])
         return parms_obj
     
-    def create_parms_cohere(self, prompt, temperature=0.5, max_tokens=250):
+    def create_parms_cohere(self, prompt, temperature=0.5, max_tokens=500):
         log.info(f"Creating parameters for Cohere model")
         parms_obj = parms(prompt)
         parms_obj.upsert_param('temperature', temperature)
@@ -94,7 +94,7 @@ class bedrock:
         parms_obj.upsert_param('contentType', 'application/json')
         return parms_obj
     
-    def create_parms_titan_text(self, prompt, model, temperature=0.5, maxTokenCount=250):
+    def create_parms_titan_text(self, prompt, model, temperature=0.5, maxTokenCount=500):
         log.info(f"Creating parameters for Titan Text model")
         parms_obj = parms(prompt)
         parms_obj.remove_param('prompt')  # Embedding doesn't require a prompt
