@@ -33,7 +33,7 @@ class bedrock:
 
             response_body = json.loads(response["body"].read())
             log.info(f"Received response from model: {model_name}")
-            return response_body
+            return self.get_response(model_name, response_body)
 
         except ClientError:
             raise
@@ -54,7 +54,7 @@ class bedrock:
             raise
 
 
-    def create_parms_meta(self, prompt, temperature=0.5, top_p=0.9, max_gen_len=512):
+    def create_parms_meta(self, prompt, temperature=0.5, top_p=0.9, max_gen_len=250):
         log.info(f"Creating parameters for Meta model")
         parms_obj = parms(prompt)
         parms_obj.upsert_param('temperature', temperature)
@@ -62,14 +62,14 @@ class bedrock:
         parms_obj.upsert_param('max_gen_len', max_gen_len) 
         return parms_obj
     
-    def create_parms_ai21(self, prompt, temperature=0.5, maxTokens=512):
+    def create_parms_ai21(self, prompt, temperature=0.5, maxTokens=250):
         log.info(f"Creating parameters for AI21 model")
         parms_obj = parms(prompt)
         parms_obj.upsert_param('temperature', temperature)
         parms_obj.upsert_param('maxTokens', maxTokens)
         return parms_obj
     
-    def create_parms_claude(self, prompt, temperature=0.5, max_tokens_to_sample=512):
+    def create_parms_claude(self, prompt, temperature=0.5, max_tokens_to_sample=250):
         log.info(f"Creating parameters for Claude model")
         enclosed_prompt = "Human: " + prompt + "\n\nAssistant:"
         parms_obj = parms(enclosed_prompt)
@@ -99,7 +99,22 @@ class bedrock:
         parms_obj.upsert_param('style_preset', style)
         return parms_obj
 
-    
+    def get_response(self, model, response):
+        log.info(f"Getting response for model: {model}")
+        if model == "meta.llama2-13b-chat-v1" or model == "meta.llama2-70b-chat-v1":
+            return response["generation"]
+        elif model == "ai21.j2-mid-v1" or model == "ai21.j2-ultra-v1":
+            return response["completions"][0]["data"]["text"]
+        elif model == "anthropic.claude-v2":
+            return response["completion"]
+        elif model == "amazon.titan-embed-text-v1":
+            return response.get('embedding')
+        elif model == "stability.stable-diffusion-xl-v1":
+            return response["artifacts"][0]["base64"]
+        else:
+            return None
+
+
     def save_image(self, base64_image_data):
         output_dir = Path("output")
         output_dir.mkdir(parents=True, exist_ok=True)
