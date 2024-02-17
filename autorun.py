@@ -49,7 +49,8 @@ def main():
     message = "Starting bedrock.py"
     log.info(message)
     print(message)
-
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
     bedrock = br.bedrock()
     model_choice, model_name = select_model()
     
