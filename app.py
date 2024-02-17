@@ -35,17 +35,23 @@ def main():
         # response = bedrock.execute(model_meta, parms_meta)
         # print_pretty(model_meta, response)
 
-        # Titan Text Lite Model
-        model_titan = enums.BedrockModels.TITAN_TEXT_G1_LITE.value
-        parms_titan = bedrock.create_parms_titan_text(prompt, model_titan)
-        response = bedrock.execute_titan(parms_titan)
-        print_pretty(model_titan, response)
+        # # Titan Text Model
+        # model_titan = enums.BedrockModels.TITAN_TEXT_G1_LITE.value
+        # parms_titan = bedrock.create_parms_titan_text(prompt, model_titan)
+        # response = bedrock.execute_titan(model_titan, parms_titan)
+        # print_pretty(model_titan, response)
 
         # #AI21 J2 Model
         # model_j2 = enums.BedrockModels.J2_MID.value
         # parms_j2 = bedrock.create_parms_ai21(prompt)
         # response = bedrock.execute(model_j2, parms_j2)
         # print_pretty(model_j2, response)
+
+        #Cohere Model
+        model_cohere = enums.BedrockModels.COHERE_COMMAND_LIGHT_TEXT_14.value
+        parms_cohere = bedrock.create_parms_cohere(prompt)
+        response = bedrock.execute(model_cohere, parms_cohere)
+        print_pretty(model_cohere, response)
 
         # #Anthropic CLAUDE2 Model
         # model_claude = enums.BedrockModels.CLAUDE2.value
@@ -63,7 +69,7 @@ def main():
         # #Amazon TITAN EMBEDDING Model - <<needed for vector embeddings>>
         # model_titan_embedding = enums.BedrockModels.TITAN_EMBEDDING.value
         # parms_titan_embedding = bedrock.create_parms_titan_embedding(prompt, model_titan_embedding)
-        # response = bedrock.execute_titan(parms_titan_embedding)
+        # response = bedrock.execute_titan(model_titan_embedding, parms_titan_embedding)
         # print_pretty(model_titan_embedding, response)
 
         

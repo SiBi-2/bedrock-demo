@@ -28,6 +28,9 @@ class BedrockModels(Enum):
     STABILITY_XL_1 = "stability.stable-diffusion-xl-v1"
     STABILITY_XL_0 = "stability.stable-diffusion-xl-v0"
     TITAN_TEXT_G1_LITE = "amazon.titan-text-lite-v1"
+    TITAN_TEXT_G1_EXPRESS = "amazon.titan-text-express-v1"
+    COHERE_COMMAND_TEXT_14 = "cohere.command-text-v14"
+    COHERE_COMMAND_LIGHT_TEXT_14 = "cohere.command-light-text-v14"
     TITAN_EMBEDDING = "amazon.titan-embed-text-v1"
 
 class OpenaiModels(Enum):

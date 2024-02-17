@@ -38,7 +38,7 @@ class bedrock:
             raise
 
 
-    def execute_titan(self, parms_obj):
+    def execute_titan(self, model_name, parms_obj):
         log.info(f"Invoking titan with parameters: {parms_obj}")
         try:
             response = self.bedrock_client.invoke_model(
@@ -47,7 +47,7 @@ class bedrock:
 
             response_body = json.loads(response["body"].read())
             log.info(f"Received response from Embedding")
-            return response_body
+            return self.get_response(model_name, response_body)
 
         except ClientError:
             raise
@@ -75,6 +75,13 @@ class bedrock:
         parms_obj.upsert_param('temperature', temperature)
         parms_obj.upsert_param('max_tokens_to_sample', max_tokens_to_sample)
         parms_obj.upsert_param('stop_sequences', ["\n\nHuman:"])
+        return parms_obj
+    
+    def create_parms_cohere(self, prompt, temperature=0.5, max_tokens=250):
+        log.info(f"Creating parameters for Cohere model")
+        parms_obj = parms(prompt)
+        parms_obj.upsert_param('temperature', temperature)
+        parms_obj.upsert_param('max_tokens', max_tokens)
         return parms_obj
 
     def create_parms_titan_embedding(self, prompt, model):
@@ -131,8 +138,12 @@ class bedrock:
             return response["completion"]
         elif model == "amazon.titan-embed-text-v1":
             return response.get('embedding')
+        elif model == "amazon.titan-text-lite-v1" or model == "amazon.titan-text-express-v1":
+            return response['results'][0]['outputText']
         elif model == "stability.stable-diffusion-xl-v1":
             return response["artifacts"][0]["base64"]
+        elif model == "cohere.command-text-v14" or model == "cohere.command-light-text-v14":
+            return response["generations"][0]["text"]
         else:
             return response
 
