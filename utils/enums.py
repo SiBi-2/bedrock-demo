@@ -26,6 +26,8 @@ class BedrockModels(Enum):
     J2_ULTRA = "ai21.j2-ultra-v1"
     CLAUDE2 = "anthropic.claude-v2"
     STABILITY_XL_1 = "stability.stable-diffusion-xl-v1"
+    STABILITY_XL_0 = "stability.stable-diffusion-xl-v0"
+    TITAN_TEXT_G1_LITE = "amazon.titan-text-lite-v1"
     TITAN_EMBEDDING = "amazon.titan-embed-text-v1"
 
 class OpenaiModels(Enum):

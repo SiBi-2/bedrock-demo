@@ -26,11 +26,10 @@ class bedrock:
         log.info(f"Invoking model: {model_name} with parameters: {parms_obj}")
         try:
             body = { **parms_obj.get_params() }
-
+            
             response = self.bedrock_client.invoke_model(
                 modelId=model_name, body=json.dumps(body)
             )
-
             response_body = json.loads(response["body"].read())
             log.info(f"Received response from model: {model_name}")
             return self.get_response(model_name, response_body)
@@ -39,8 +38,8 @@ class bedrock:
             raise
 
 
-    def execute_embeddings(self, parms_obj):
-        log.info(f"Invoking Embedding with parameters: {parms_obj}")
+    def execute_titan(self, parms_obj):
+        log.info(f"Invoking titan with parameters: {parms_obj}")
         try:
             response = self.bedrock_client.invoke_model(
                 **parms_obj.get_params()
@@ -88,6 +87,29 @@ class bedrock:
         parms_obj.upsert_param('contentType', 'application/json')
         return parms_obj
     
+    def create_parms_titan_text(self, prompt, model, temperature=0.5, maxTokenCount=250):
+        log.info(f"Creating parameters for Titan Text model")
+        parms_obj = parms(prompt)
+        parms_obj.remove_param('prompt')  # Embedding doesn't require a prompt
+        parms_obj.upsert_param('modelId', model)
+        parms_obj.upsert_param('accept', 'application/json')
+        parms_obj.upsert_param('contentType', 'application/json')
+
+        body = {
+            "inputText": prompt,
+            "textGenerationConfig": {
+                "maxTokenCount": maxTokenCount,
+                "stopSequences": [],
+                "temperature": temperature,
+                "topP": 1
+            }
+        }
+
+        body_json = json.dumps(body)
+        parms_obj.upsert_param('body', body_json)
+        return parms_obj
+
+    
     def create_parms_stability_ai(self, prompt, style):
         log.info(f"Creating parameters for Stability AI model")
         parms_obj = parms(prompt)
@@ -112,7 +134,7 @@ class bedrock:
         elif model == "stability.stable-diffusion-xl-v1":
             return response["artifacts"][0]["base64"]
         else:
-            return None
+            return response
 
 
     def save_image(self, base64_image_data):
