@@ -24,7 +24,7 @@ def print_pretty(model_name, completion):
 def select_model():
     os.system('cls' if os.name == 'nt' else 'clear')
     model_names = {
-        '0': "EXIT",
+        '0': "exit",
         '1': "amazon.titan",
         '2': "meta.llama2",
         '3': "ai21.j2",
