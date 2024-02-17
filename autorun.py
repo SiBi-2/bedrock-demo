@@ -22,6 +22,7 @@ def print_pretty(model_name, completion):
 
 
 def select_model():
+    os.system('cls' if os.name == 'nt' else 'clear')
     model_names = {
         '1': "amazon.titan-text-lite-v1",
         '2': "meta.llama2-13b-chat-v1",
@@ -49,18 +50,18 @@ def main():
     message = "Starting bedrock.py"
     log.info(message)
     print(message)
-    os.system('cls' if os.name == 'nt' else 'clear')
-    
+
+
     bedrock = br.bedrock()
     model_choice, model_name = select_model()
     
     while True:
-        question = input("Enter your question (or type 'exit' to quit, 'model' to switch models): ")
+        question = input("Enter your question (or type 'exit' to quit, 'model' to switch models):\n")
         if question.lower() == 'exit':
             print("Exiting...")
             break
         elif question.lower() == 'model':
-            model_choice = select_model()
+            model_choice, model_name = select_model()
         else:
             try:
                 prompt = question
