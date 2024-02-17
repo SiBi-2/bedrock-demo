@@ -1,6 +1,7 @@
 import os
 import sys
 import base64  
+import time
 import webbrowser
 import utils.bedrock_helper as br
 from utils.parms import ModelParams as parms
@@ -17,8 +18,23 @@ def print_pretty(model_name, completion):
     print("-" * 67)
     print("Model: ", model_name)
     print("-" * 67)
-    print(completion)
+    # print(completion)
+    print_words_by_speed(completion, 0.06)
     print("-" * 67)
+
+def print_words_by_speed(text, speed):
+    words = text.split()
+    word_count = 0
+    for word in words:
+        sys.stdout.write(word + ' ')
+        sys.stdout.flush()  # Make sure the word is printed immediately
+        time.sleep(speed)  # Wait for the specified speed
+        word_count += 1
+        
+        # Example condition to add a break/newline
+        if word.endswith('.') or word.endswith("\n") or word.endswith(":"): # or word_count % 10 == 0
+            print()  # Move to the next line
+            word_count = 0  # Reset the word count for the next line
 
 
 def select_model():
