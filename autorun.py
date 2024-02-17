@@ -121,7 +121,8 @@ def main():
                     parms_stability = bedrock.create_parms_stability_ai(image_prompt, enums.StylePreset.CINEMATIC.value)
                     response = bedrock.execute(model_stability, parms_stability)
                     image_path = bedrock.save_image(response)
-                    print(f"The generated image has been saved to {image_path}")
+                    model_stability = enums.BedrockModels.STABILITY_XL_1.value
+                    print_pretty(model_stability, f"The generated image has been saved to {image_path}")
 
                     # Open the image in the default browser
                     webbrowser.open('file://' + os.path.realpath(image_path))
