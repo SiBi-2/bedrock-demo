@@ -24,6 +24,7 @@ def print_pretty(model_name, completion):
 def select_model():
     os.system('cls' if os.name == 'nt' else 'clear')
     model_names = {
+        '0': "EXIT",
         '1': "amazon.titan-text-lite-v1",
         '2': "meta.llama2-13b-chat-v1",
         '3': "ai21.j2-mid-v1",
@@ -37,6 +38,9 @@ def select_model():
             print(f"{number}. {name}")
         model_choice = input("Enter the number of the model you want to use: ")
         if model_choice in model_names:
+            if model_choice == '0':
+                os.system('cls' if os.name == 'nt' else 'clear')
+                sys.exit(0)
             model_name = model_names[model_choice]
             print("-" * 67)
             print(f"Model {model_name} selected.")
