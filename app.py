@@ -51,11 +51,11 @@ def main():
     prompt = "Write a paragraph about Steve Jobs and his impact on the world."
     image_prompt = "A beautiful sunset over the ocean, with a sailboat in the distance."
     try:
-        # # Titan Text Model
-        # model_titan = enums.BedrockModels.TITAN_TEXT_G1_LITE.value
-        # parms_titan = bedrock.create_parms_titan_text(prompt, model_titan)
-        # response = bedrock.execute_titan(model_titan, parms_titan)
-        # print_by_words(model_titan, response)
+        # Titan Text Model
+        model_titan = enums.BedrockModels.TITAN_TEXT_G1_LITE.value
+        parms_titan = bedrock.create_parms_titan_text(prompt, model_titan)
+        response = bedrock.execute_titan(model_titan, parms_titan)
+        print_by_words(model_titan, response)
 
         # #Meta LLAMA2 Model
         # model_meta = enums.BedrockModels.LLAMA2_CHAT_13B.value
@@ -69,11 +69,11 @@ def main():
         # response = bedrock.execute(model_j2, parms_j2)
         # print_by_words(model_j2, response)
 
-        #Cohere Model
-        model_cohere = enums.BedrockModels.COHERE_COMMAND_LIGHT_TEXT_14.value
-        parms_cohere = bedrock.create_parms_cohere(prompt)
-        response = bedrock.execute(model_cohere, parms_cohere)
-        print_by_words(model_cohere, response)
+        # #Cohere Model
+        # model_cohere = enums.BedrockModels.COHERE_COMMAND_LIGHT_TEXT_14.value
+        # parms_cohere = bedrock.create_parms_cohere(prompt)
+        # response = bedrock.execute(model_cohere, parms_cohere)
+        # print_by_words(model_cohere, response)
 
         # #Anthropic CLAUDE2 Model
         # model_claude = enums.BedrockModels.CLAUDE2.value
