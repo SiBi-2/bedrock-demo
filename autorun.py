@@ -18,23 +18,19 @@ def print_pretty(model_name, completion):
     print("-" * 67)
     print("Model: ", model_name)
     print("-" * 67)
-    # print(completion)
-    print_words_by_speed(completion, 0.06)
+    print_words_by_speed(completion, 0.06) # lower number is faster
     print("-" * 67)
 
 def print_words_by_speed(text, speed):
     words = text.split()
-    word_count = 0
+
     for word in words:
         sys.stdout.write(word + ' ')
-        sys.stdout.flush()  # Make sure the word is printed immediately
-        time.sleep(speed)  # Wait for the specified speed
-        word_count += 1
+        sys.stdout.flush()
+        time.sleep(speed)
         
-        # Example condition to add a break/newline
-        if word.endswith('.') or word.endswith("\n") or word.endswith(":"): # or word_count % 10 == 0
-            print()  # Move to the next line
-            word_count = 0  # Reset the word count for the next line
+        if word.endswith('.') or word.endswith("\n") or word.endswith(":"):
+            print("\n")
 
 
 def select_model():
@@ -61,7 +57,7 @@ def select_model():
             print("-" * 67)
             print(f"Model {model_name} selected.")
             print("-" * 67)
-            return model_choice, model_name  # Return both choice and full name
+            return model_choice, model_name
         else:
             print("Invalid selection. Please enter a valid number.")
 
