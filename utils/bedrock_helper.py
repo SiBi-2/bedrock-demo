@@ -8,12 +8,12 @@ from pathlib import Path
 import base64
 import os
 from utils.parms import ModelParams as parms
+import webbrowser
 
-
-class bedrock:
+class Bedrock:
     def __init__(self):
         log.info(f"CLASS:Bedrock Initialized")
-        # credentials and config are handled by boto3 files in ~/.aws
+        #######  credentials and config are handled by boto3 files in ~/.aws  #######
         try: 
             self.bedrock_client = boto3.client(service_name="bedrock-runtime")
         except Exception as e:
@@ -162,4 +162,5 @@ class bedrock:
         with open(file_path, "wb") as file:
             file.write(image_data)
 
+        webbrowser.open('file://' + os.path.realpath(file_path))
         return str(file_path)
