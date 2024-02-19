@@ -29,8 +29,10 @@ class PrintHelper:
         console.print(markdown)
 
 
-    def print_pretty(self, model_name, text, prompt, isEmbedding=False):
-        # self.clear_screen()
+    def print_pretty(self, model_name, text, prompt, clear_screen=False, isEmbedding=False):
+        if clear_screen:
+            self.clear_screen()
+
         print("-" * 67)
         print("Model: ", model_name)
         print("-" * 67)
